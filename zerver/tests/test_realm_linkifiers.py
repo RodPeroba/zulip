@@ -259,7 +259,7 @@ class RealmFilterTest(ZulipTestCase):
             url_template_validator(url)
 
         # No need to test this extensively, because most of the invalid
-        # cases should be handled and tested in the uri_template library
+        # cases should be handled and tested in the url_template library
         # we used for validation.
         invalid_urls = [
             "https://example.com/{foo",
