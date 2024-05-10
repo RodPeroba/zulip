@@ -947,7 +947,7 @@ def get_base_payload(user_profile: UserProfile) -> Dict[str, Any]:
     # These will let the app support logging into multiple realms and servers.
     data["server"] = settings.EXTERNAL_HOST
     data["realm_id"] = user_profile.realm.id
-    data["realm_uri"] = user_profile.realm.uri
+    data["realm_url"] = user_profile.realm.url
     data["realm_name"] = user_profile.realm.name
     data["user_id"] = user_profile.id
 
@@ -1448,13 +1448,13 @@ def send_test_push_notification_directly_to_devices(
     apple_payload = copy.deepcopy(payload)
     android_payload = copy.deepcopy(payload)
 
-    realm_uri = base_payload["realm_uri"]
+    realm_url = base_payload["realm_url"]
     realm_name = base_payload["realm_name"]
     apns_data = {
         "alert": {
             "title": _("Test notification"),
-            "body": _("This is a test notification from {realm_name} ({realm_uri}).").format(
-                realm_name=realm_name, realm_uri=realm_uri
+            "body": _("This is a test notification from {realm_name} ({realm_url}).").format(
+                realm_name=realm_name, realm_url=realm_url
             ),
         },
         "sound": "default",
