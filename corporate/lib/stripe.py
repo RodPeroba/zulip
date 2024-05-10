@@ -380,7 +380,7 @@ def payment_method_string(stripe_customer: stripe.Customer) -> str:
 
 
 def build_support_url(support_view: str, query_text: str) -> str:
-    support_realm_url = get_realm(settings.STAFF_SUBDOMAIN).uri
+    support_realm_url = get_realm(settings.STAFF_SUBDOMAIN).url
     support_url = urljoin(support_realm_url, reverse(support_view))
     query = urlencode({"q": query_text})
     support_url = append_url_query_string(support_url, query)
@@ -3482,7 +3482,7 @@ class RealmBillingSession(BillingSession):
     @override
     @property
     def billing_session_url(self) -> str:
-        return self.realm.uri
+        return self.realm.url
 
     @override
     @property
@@ -3837,7 +3837,7 @@ class RemoteRealmBillingSession(BillingSession):
     @override
     @property
     def billing_session_url(self) -> str:  # nocoverage
-        return f"{settings.EXTERNAL_URI_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}/realm/{self.remote_realm.uuid}"
+        return f"{settings.EXTERNAL_URL_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}/realm/{self.remote_realm.uuid}"
 
     @override
     @property
@@ -4278,7 +4278,7 @@ class RemoteServerBillingSession(BillingSession):
     @override
     @property
     def billing_session_url(self) -> str:  # nocoverage
-        return f"{settings.EXTERNAL_URI_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}/server/{self.remote_server.uuid}"
+        return f"{settings.EXTERNAL_URL_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}/server/{self.remote_server.uuid}"
 
     @override
     @property
@@ -5025,7 +5025,7 @@ def downgrade_small_realms_behind_on_payments_as_needed() -> None:
             billing_session.downgrade_now_without_creating_additional_invoices()
             billing_session.void_all_open_invoices()
             context: Dict[str, Union[str, Realm]] = {
-                "upgrade_url": f"{realm.uri}{reverse('upgrade_page')}",
+                "upgrade_url": f"{realm.url}{reverse('upgrade_page')}",
                 "realm": realm,
             }
             send_email_to_billing_admins_and_realm_owners(
