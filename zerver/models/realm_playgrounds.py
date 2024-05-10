@@ -1,6 +1,6 @@
 from typing import List
 
-import uri_template
+import url_template
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
@@ -60,11 +60,11 @@ class RealmPlayground(models.Model):
         # with. The ValidationError for invalid template will only be raised by
         # the validator set on the url_template field instead of here to avoid
         # duplicates.
-        if not uri_template.validate(self.url_template):
+        if not url_template.validate(self.url_template):
             return
 
         # Extract variables used in the URL template.
-        template_variables = set(uri_template.URITemplate(self.url_template).variable_names)
+        template_variables = set(url_template.URLTemplate(self.url_template).variable_names)
 
         if "code" not in template_variables:
             raise ValidationError(_('Missing the required variable "code" in the URL template'))
