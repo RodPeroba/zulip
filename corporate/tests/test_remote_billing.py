@@ -172,7 +172,7 @@ class RemoteRealmBillingTestCase(BouncerTestCase):
             remote_realm_uuid=str(user.realm.uuid),
             remote_billing_user_id=remote_billing_user.id,
             authenticated_at=datetime_to_timestamp(now),
-            uri_scheme="http://",
+            url_scheme="http://",
             next_page=next_page,
         )
         self.assertEqual(
