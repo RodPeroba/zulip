@@ -8059,15 +8059,15 @@ paths:
                       result: {}
                       msg: {}
                       ignored_parameters_unsupported: {}
-                      uri:
+                      url:
                         type: string
                         description: |
-                          The URI of the uploaded file.
+                          The URL of the uploaded file.
                     example:
                       {
                         "msg": "",
                         "result": "success",
-                        "uri": "/user_uploads/1/4e/m2A3MSqFnWRLUf9SaPzQ0Up_/zulip.txt",
+                        "url": "/user_uploads/1/4e/m2A3MSqFnWRLUf9SaPzQ0Up_/zulip.txt",
                       }
   /user_uploads/{realm_id_str}/{filename}:
     get:
@@ -14786,7 +14786,7 @@ paths:
 
                           The fake email domain that will be used for new bots created this
                           organization. Useful for UI for creating bots.
-                      realm_uri:
+                      realm_url:
                         type: string
                         description: |
                           Present if `realm` is present in `fetch_event_types`.
@@ -16174,7 +16174,7 @@ paths:
                           password combination.
 
                           [ldap-auth]: https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#ldap-including-active-directory
-                      realm_uri:
+                      realm_url:
                         type: string
                         description: |
                           The organization's canonical URL.
@@ -16226,7 +16226,7 @@ paths:
                         "is_incompatible": false,
                         "email_auth_enabled": true,
                         "require_email_format_usernames": true,
-                        "realm_uri": "http://localhost:9991",
+                        "realm_url": "http://localhost:9991",
                         "realm_name": "Zulip Dev",
                         "realm_icon": "https://secure.gravatar.com/avatar/62429d594b6ffc712f54aee976a18b44?d=identicon",
                         "realm_description": "<p>The Zulip development environment default organization.  It's great for testing!</p>",
