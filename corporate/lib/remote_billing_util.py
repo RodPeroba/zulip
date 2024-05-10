@@ -35,7 +35,7 @@ class RemoteBillingIdentityDict(TypedDict):
 
     remote_billing_user_id: Optional[int]
     authenticated_at: int
-    uri_scheme: Literal["http://", "https://"]
+    url_scheme: Literal["http://", "https://"]
 
     next_page: Optional[str]
 
@@ -55,11 +55,11 @@ class RemoteBillingIdentityExpiredError(Exception):
         *,
         realm_uuid: Optional[str] = None,
         server_uuid: Optional[str] = None,
-        uri_scheme: Optional[Literal["http://", "https://"]] = None,
+        url_scheme: Optional[Literal["http://", "https://"]] = None,
     ) -> None:
         self.realm_uuid = realm_uuid
         self.server_uuid = server_uuid
-        self.uri_scheme = uri_scheme
+        self.url_scheme = url_scheme
 
 
 def get_identity_dict_from_session(
@@ -93,7 +93,7 @@ def get_identity_dict_from_session(
         raise RemoteBillingIdentityExpiredError(
             realm_uuid=result.get("remote_realm_uuid"),
             server_uuid=result.get("remote_server_uuid"),
-            uri_scheme=result.get("uri_scheme"),
+            url_scheme=result.get("url_scheme"),
         )
 
     return result

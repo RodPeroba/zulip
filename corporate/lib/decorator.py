@@ -88,14 +88,14 @@ def authenticated_remote_realm_management_endpoint(
             # realm.
             realm_uuid = e.realm_uuid
             server_uuid = e.server_uuid
-            uri_scheme = e.uri_scheme
+            url_scheme = e.url_scheme
             if realm_uuid is None:
                 # This doesn't make sense - if get_remote_realm_and_user_from_session
                 # found an expired identity dict, it should have had a realm_uuid.
                 raise AssertionError
 
             assert server_uuid is not None, "identity_dict with realm_uuid must have server_uuid"
-            assert uri_scheme is not None, "identity_dict with realm_uuid must have uri_scheme"
+            assert url_scheme is not None, "identity_dict with realm_uuid must have url_scheme"
 
             try:
                 remote_realm = RemoteRealm.objects.get(uuid=realm_uuid, server__uuid=server_uuid)
@@ -104,10 +104,10 @@ def authenticated_remote_realm_management_endpoint(
                 # was deleted.
                 raise AssertionError
 
-            # Using EXTERNAL_URI_SCHEME means we'll do https:// in production, which is
+            # Using EXTERNAL_URL_SCHEME means we'll do https:// in production, which is
             # the sane default - while having http:// in development, which will allow
             # these redirects to work there for testing.
-            url = urljoin(uri_scheme + remote_realm.host, "/self-hosted-billing/")
+            url = urljoin(url_scheme + remote_realm.host, "/self-hosted-billing/")
 
             page_type = get_next_page_param_from_request_path(request)
             if page_type is not None:
