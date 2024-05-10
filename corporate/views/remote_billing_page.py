@@ -87,7 +87,7 @@ def remote_realm_billing_entry(
     *,
     user: Json[UserDataForRemoteBilling],
     realm: Json[RealmDataForAnalytics],
-    uri_scheme: Literal["http://", "https://"] = "https://",
+    url_scheme: Literal["http://", "https://"] = "https://",
     next_page: VALID_NEXT_PAGES_TYPE = None,
 ) -> HttpResponse:
     try:
@@ -114,14 +114,14 @@ def remote_realm_billing_entry(
         remote_realm_uuid=str(remote_realm.uuid),
         remote_billing_user_id=None,
         authenticated_at=datetime_to_timestamp(timezone_now()),
-        uri_scheme=uri_scheme,
+        url_scheme=url_scheme,
         next_page=next_page,
     )
 
     signed_identity_dict = signing.dumps(identity_dict)
 
     billing_access_url = (
-        f"{settings.EXTERNAL_URI_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}"
+        f"{settings.EXTERNAL_URL_SCHEME}{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}"
         + reverse(remote_realm_billing_finalize_login, args=[signed_identity_dict])
     )
     return json_success(request, data={"billing_access_url": billing_access_url})
@@ -391,7 +391,7 @@ def remote_realm_billing_confirm_email(
         remote_realm=remote_realm,
         user_uuid=identity_dict["user"]["user_uuid"],
         next_page=identity_dict["next_page"],
-        uri_scheme=identity_dict["uri_scheme"],
+        url_scheme=identity_dict["url_scheme"],
     )
     url = create_remote_billing_confirmation_link(
         obj,
@@ -448,12 +448,12 @@ def remote_realm_billing_from_login_confirmation_link(
     assert isinstance(prereg_object, PreregistrationRemoteRealmBillingUser)
     remote_realm = prereg_object.remote_realm
 
-    uri_scheme = prereg_object.uri_scheme
+    url_scheme = prereg_object.url_scheme
     next_page = prereg_object.next_page
     assert next_page in VALID_NEXT_PAGES
-    assert uri_scheme in ["http://", "https://"]
+    assert url_scheme in ["http://", "https://"]
     # Mypy is not satisfied by the above assert, so we need to cast.
-    uri_scheme = cast(Literal["http://", "https://"], uri_scheme)
+    url_scheme = cast(Literal["http://", "https://"], url_scheme)
 
     remote_billing_user, created = RemoteRealmBillingUser.objects.get_or_create(
         remote_realm=remote_realm,
@@ -481,7 +481,7 @@ def remote_realm_billing_from_login_confirmation_link(
         # This will be figured out by the next endpoint in the flow anyway.
         remote_billing_user_id=None,
         authenticated_at=datetime_to_timestamp(timezone_now()),
-        uri_scheme=uri_scheme,
+        url_scheme=url_scheme,
         next_page=next_page,
     )
 
