@@ -1,7 +1,7 @@
 from typing import List, Pattern
 
 import re2
-import uri_template
+import url_template
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CASCADE
@@ -41,7 +41,7 @@ def filter_pattern_validator(value: str) -> Pattern[str]:
 
 def url_template_validator(value: str) -> None:
     """Validate as a URL template"""
-    if not uri_template.validate(value):
+    if not url_template.validate(value):
         raise ValidationError(_("Invalid URL template."))
 
 
@@ -80,11 +80,11 @@ class RealmFilter(models.Model):
         # Do not continue the check if the url template is invalid to begin with.
         # The ValidationError for invalid template will only be raised by the validator
         # set on the url_template field instead of here to avoid duplicates.
-        if not uri_template.validate(self.url_template):
+        if not url_template.validate(self.url_template):
             return
 
         # Extract variables used in the URL template.
-        template_variables_set = set(uri_template.URITemplate(self.url_template).variable_names)
+        template_variables_set = set(url_template.URLTemplate(self.url_template).variable_names)
 
         # Report patterns missing in linkifier pattern.
         missing_in_pattern_set = template_variables_set - group_set
