@@ -107,8 +107,8 @@ def _get_unversioned_gravatar_url(email: str, medium: bool) -> str:
         gravitar_query_suffix = f"&s={MEDIUM_AVATAR_SIZE}" if medium else ""
         hash_key = gravatar_hash(email)
         return f"https://secure.gravatar.com/avatar/{hash_key}?d=identicon{gravitar_query_suffix}"
-    elif settings.DEFAULT_AVATAR_URI is not None:
-        return settings.DEFAULT_AVATAR_URI
+    elif settings.DEFAULT_AVATAR_URL is not None:
+        return settings.DEFAULT_AVATAR_URL
     else:
         return staticfiles_storage.url("images/default-avatar.png")
 
@@ -135,7 +135,7 @@ def absolute_avatar_url(user_profile: UserProfile) -> str:
     avatar = avatar_url(user_profile)
     # avatar_url can return None if client_gravatar=True, however here we use the default value of False
     assert avatar is not None
-    return urljoin(user_profile.realm.uri, avatar)
+    return urljoin(user_profile.realm.url, avatar)
 
 
 def is_avatar_new(ldap_avatar: bytes, user_profile: UserProfile) -> bool:
