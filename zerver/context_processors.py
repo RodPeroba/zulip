@@ -42,10 +42,10 @@ def common_context(user: UserProfile) -> Dict[str, Any]:
     have a request.
     """
     return {
-        "realm_uri": user.realm.uri,
+        "realm_url": user.realm.url,
         "realm_name": user.realm.name,
-        "root_domain_url": settings.ROOT_DOMAIN_URI,
-        "external_url_scheme": settings.EXTERNAL_URI_SCHEME,
+        "root_domain_url": settings.ROOT_DOMAIN_URL,
+        "external_url_scheme": settings.EXTERNAL_URL_SCHEME,
         "external_host": settings.EXTERNAL_HOST,
         "user_name": user.full_name,
         "corporate_enabled": settings.CORPORATE_ENABLED,
@@ -118,11 +118,11 @@ def zulip_default_context(request: HttpRequest) -> Dict[str, Any]:
     realm = get_realm_from_request(request)
 
     if realm is None:
-        realm_uri = settings.ROOT_DOMAIN_URI
+        realm_l = settings.ROOT_DOMAIN_URL
         realm_name = None
         realm_icon = None
     else:
-        realm_uri = realm.uri
+        realm_url = realm.url
         realm_name = realm.name
         realm_icon = get_realm_icon_url(realm)
 
@@ -146,7 +146,7 @@ def zulip_default_context(request: HttpRequest) -> Dict[str, Any]:
         find_team_link_disabled = False
         skip_footer = True
 
-    apps_page_web = settings.ROOT_DOMAIN_URI + "/accounts/go/"
+    apps_page_web = settings.ROOT_DOMAIN_URL + "/accounts/go/"
 
     if settings.DEVELOPMENT:
         secrets_path = "zproject/dev-secrets.conf"
@@ -189,11 +189,11 @@ def zulip_default_context(request: HttpRequest) -> Dict[str, Any]:
         "login_url": settings.HOME_NOT_LOGGED_IN,
         "only_sso": settings.ONLY_SSO,
         "external_host": settings.EXTERNAL_HOST,
-        "external_url_scheme": settings.EXTERNAL_URI_SCHEME,
-        "realm_uri": realm_uri,
+        "external_url_scheme": settings.EXTERNAL_URL_SCHEME,
+        "realm_url": realm_url,
         "realm_name": realm_name,
         "realm_icon": realm_icon,
-        "root_domain_url": settings.ROOT_DOMAIN_URI,
+        "root_domain_url": settings.ROOT_DOMAIN_URL,
         "apps_page_url": get_apps_page_url(),
         "apps_page_web": apps_page_web,
         "open_realm_creation": settings.OPEN_REALM_CREATION,
@@ -217,9 +217,9 @@ def zulip_default_context(request: HttpRequest) -> Dict[str, Any]:
         "corporate_enabled": corporate_enabled,
     }
 
-    context["PAGE_METADATA_URL"] = f"{realm_uri}{request.path}"
+    context["PAGE_METADATA_URL"] = f"{realm_url}{request.path}"
     if realm is not None and realm.icon_source == realm.ICON_UPLOADED:
-        context["PAGE_METADATA_IMAGE"] = urljoin(realm_uri, realm_icon)
+        context["PAGE_METADATA_IMAGE"] = urljoin(realm_url, realm_icon)
 
     return context
 
