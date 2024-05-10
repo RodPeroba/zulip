@@ -65,7 +65,7 @@ def api_beanstalk_webhook(
     # Beanstalk supports both SVN and Git repositories
     # We distinguish between the two by checking for a
     # 'uri' key that is only present for Git repos
-    git_repo = "uri" in payload
+    git_repo = "url" in payload
     if git_repo:
         if branches is not None and branches.find(payload["branch"].tame(check_string)) == -1:
             return json_success(request)
